@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['8.1', '8.2', '8.3']
+        symfony-version: ['5.4.*', '6.4.*', '7.0.*']
+        doctrine-orm-version: ['2.14.*', '2.15.*', '2.16.*', '2.17.*', '3.0.*']
+        exclude:
+          # Symfony 5.4 is not compatible with PHP 8.3
+          - php-version: '8.3'
+            symfony-version: '5.4.*'
+          # Symfony 6.4 is not compatible with PHP 8.1
+          - php-version: '8.1'
+            symfony-version: '6.4.*'
+          # Symfony 7.0 is not compatible with PHP 8.1 and 8.2
+          - php-version: '8.1'
+            symfony-version: '7.0.*'
+          - php-version: '8.2'
+            symfony-version: '7.0.*'
+
+    name: P${{ matrix.php-version }} - S${{ matrix.symfony-version }} - D${{ matrix.doctrine-orm-version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, sqlite3
+          coverage: none
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: "--prefer-dist --no-progress --no-interaction --optimize-autoloader"
+          php-version: ${{ matrix.php-version }}
+          symfony-version: ${{ matrix.symfony-version }}
+          doctrine-orm-version: ${{ matrix.doctrine-orm-version }}
+
+      - name: Run PHP-CS-Fixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --using-cache=no
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --configuration=phpstan.neon --memory-limit=1G
+
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit --testsuite unit --testsuite functional

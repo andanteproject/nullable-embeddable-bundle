@@ -1,0 +1,57 @@
+{
+    "name": "andanteproject/nullable-embeddable-bundle",
+    "description": "A Symfony Bundle to handle nullable embeddables with Doctrine",
+    "keywords": [
+        "symfony",
+        "symfony-bundle",
+        "doctrine",
+        "doctrine-orm",
+        "embeddable",
+        "nullable",
+        "php",
+        "php8"
+    ],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andante Project",
+            "homepage": "https://github.com/andanteproject"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "symfony/config": "^5.0 || ^6.0 || ^7.0",
+        "symfony/http-kernel": "^5.0 || ^6.0 || ^7.0",
+        "symfony/dependency-injection": "^5.0 || ^6.0 || ^7.0",
+        "symfony/property-access": "^5.0 || ^6.0 || ^7.0",
+        "doctrine/orm": "^2.0 | ^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Andante\\NullableEmbeddableBundle\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Andante\\NullableEmbeddableBundle\\Tests\\": "tests"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "symfony/cache": "^5.0 || ^6.0 || ^7.0",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpstan/phpstan": "^1.0",
+        "phpstan/phpstan-doctrine": "^1.0",
+        "phpstan/phpstan-symfony": "^1.0",
+        "phpstan/phpstan-webmozart-assert": "^1.0",
+        "symfony/framework-bundle": "^5.0 || ^6.0 || ^7.0",
+        "doctrine/doctrine-bundle": "^2.0",
+        "symfony/test-pack": "^1.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
+    }
+}
