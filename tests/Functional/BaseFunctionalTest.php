@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Andante\NullableEmbeddableBundle\Tests\Functional;
 
-use Andante\NullableEmbeddableBundle\Doctrine\EventSubscriber\NullableEmbeddableSubscriber;
 use Andante\NullableEmbeddableBundle\Tests\App\AppKernel;
-use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

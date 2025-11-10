@@ -45,13 +45,15 @@
         "phpstan/phpstan-doctrine": "^1.0",
         "phpstan/phpstan-symfony": "^1.0",
         "phpstan/phpstan-webmozart-assert": "^1.0",
+        "phpstan/extension-installer": "^1.0",
         "symfony/framework-bundle": "^5.0 || ^6.0 || ^7.0",
         "doctrine/doctrine-bundle": "^2.0",
         "symfony/test-pack": "^1.0"
     },
     "config": {
         "allow-plugins": {
-            "composer/package-versions-deprecated": true
+            "composer/package-versions-deprecated": true,
+            "phpstan/extension-installer": true
         }
     }
 }

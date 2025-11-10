@@ -7,11 +7,11 @@ namespace Andante\NullableEmbeddableBundle\Tests\App;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class InvalidProcessorAppKernel extends AppKernel
+class ClosureProcessorAppKernel extends AppKernel
 {
     public function getCacheDir(): string
     {
-        return parent::getCacheDir().'/invalid';
+        return parent::getCacheDir().'/closure';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
@@ -22,12 +22,12 @@ class InvalidProcessorAppKernel extends AppKernel
             $container->loadFromExtension('doctrine', [
                 'orm' => [
                     'mappings' => [
-                        'AndanteNullableEmbeddableBundleInvalidProcessors' => [
+                        'AndanteNullableEmbeddableBundleValidClosureProcessorProcessors' => [
                             'is_bundle' => false,
                             'type' => 'attribute',
-                            'dir' => '%kernel.project_dir%/tests/Fixtures/InvalidEntity',
-                            'prefix' => 'Andante\NullableEmbeddableBundle\Tests\Fixtures\InvalidEntity',
-                            'alias' => 'InvalidProcessorsMapping',
+                            'dir' => '%kernel.project_dir%/tests/Fixtures/ValidClosureProcessorEntity',
+                            'prefix' => 'Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidClosureProcessorEntity',
+                            'alias' => 'ValidClosureProcessorMapping',
                         ],
                     ],
                 ],

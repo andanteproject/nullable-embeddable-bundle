@@ -1,0 +1,10 @@
+parameters:
+    level: 9
+    bootstrapFiles:
+        - tests/phpstan-bootstrap.php
+    scanDirectories:
+        - src
+        - tests
+        - phpstan-stubs
+    excludePaths:
+        - tests/Fixtures/ValidClosureProcessorEntity

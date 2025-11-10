@@ -7,7 +7,8 @@ namespace Andante\NullableEmbeddableBundle\Tests\Functional;
 use Andante\NullableEmbeddableBundle\CacheWarmer\NullableEmbeddableCacheWarmer;
 use Andante\NullableEmbeddableBundle\NullableEmbeddable\Registry;
 use Andante\NullableEmbeddableBundle\Tests\App\AppKernel;
-use Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidEntity\Order;
+use Andante\NullableEmbeddableBundle\Tests\App\ClassStringProcessorAppKernel;
+use Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidClassStringProcessorEntity\Order;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -34,7 +35,7 @@ class CacheWarmerTest extends KernelTestCase
         /** @var string $env */
         $env = $options['environment'] ?? 'test';
 
-        return new AppKernel(
+        return new ClassStringProcessorAppKernel(
             environment: $env,
             debug: (bool) ($options['debug'] ?? true),
             config: $config

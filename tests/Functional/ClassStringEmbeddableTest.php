@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace Andante\NullableEmbeddableBundle\Tests\Functional;
 
-use Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidEntity\Address;
-use Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidEntity\Country;
-use Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidEntity\Order;
+use Andante\NullableEmbeddableBundle\Tests\App\ClassStringProcessorAppKernel;
+use Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidClassStringProcessorEntity\Address;
+use Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidClassStringProcessorEntity\Country;
+use Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidClassStringProcessorEntity\Order;
 
-class NullableEmbeddableTest extends BaseFunctionalTest
+class ClassStringEmbeddableTest extends BaseFunctionalTest
 {
+    protected static function getKernelClass(): string
+    {
+        return ClassStringProcessorAppKernel::class;
+    }
+
     public function testBillingAddressIsSetToNullWhenAllPropertiesAreNull(): void
     {
         $shippingAddress = (new Address())->setStreet('Shipping Street');

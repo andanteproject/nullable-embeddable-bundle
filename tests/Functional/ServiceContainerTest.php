@@ -8,7 +8,7 @@ use Andante\NullableEmbeddableBundle\CacheClearer\NullableEmbeddableCacheClearer
 use Andante\NullableEmbeddableBundle\CacheWarmer\NullableEmbeddableCacheWarmer;
 use Andante\NullableEmbeddableBundle\NullableEmbeddable\MetadataFactory;
 use Andante\NullableEmbeddableBundle\NullableEmbeddable\Registry;
-use Andante\NullableEmbeddableBundle\Tests\App\AppKernel;
+use Andante\NullableEmbeddableBundle\Tests\App\ClassStringProcessorAppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
@@ -16,7 +16,7 @@ class ServiceContainerTest extends KernelTestCase
 {
     protected static function getKernelClass(): string
     {
-        return AppKernel::class;
+        return ClassStringProcessorAppKernel::class;
     }
 
     public function testServicesAreConfigured(): void

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Andante\NullableEmbeddableBundle\Tests\Fixtures\Processor;
+namespace Andante\NullableEmbeddableBundle\Tests\Fixtures\InvalidEntity\Processor;
 
 // This class intentionally does NOT implement ProcessorInterface
 class InvalidProcessor

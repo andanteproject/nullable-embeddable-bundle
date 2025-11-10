@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Andante\NullableEmbeddableBundle\Tests\Fixtures\Processor;
+namespace Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidClassStringProcessorEntity\Processor;
 
 use Andante\NullableEmbeddableBundle\Exception\UnexpectedEmbeddableClassException;
 use Andante\NullableEmbeddableBundle\ProcessorInterface;
 use Andante\NullableEmbeddableBundle\PropertyAccess\PropertyAccessor;
 use Andante\NullableEmbeddableBundle\Result;
-use Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidEntity\Address;
+use Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidClassStringProcessorEntity\Address;
 use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
 class AddressEmbeddableProcessor implements ProcessorInterface

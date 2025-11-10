@@ -10,7 +10,6 @@ use Andante\NullableEmbeddableBundle\ProcessorInterface;
 use Andante\NullableEmbeddableBundle\PropertyAccess\PropertyAccessor;
 use Andante\NullableEmbeddableBundle\Result;
 use Doctrine\ORM\Event\PostLoadEventArgs;
-use Doctrine\ORM\Events;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 
 class NullableEmbeddableSubscriber
@@ -44,21 +43,52 @@ class NullableEmbeddableSubscriber
         if (\count($embeds) > 0) {
             foreach ($embeds as $embedded) {
                 foreach ($embedded->getNullableEmbeddableAttributes() as $attribute) {
-                    /** @var ProcessorInterface $processor */
-                    $processor = new ($attribute->processor)();
-
+                    $processor = $attribute->processor;
                     $embeddablePropertyPath = $embedded->getPropertyPath();
 
                     /** @var object $entity */
                     /** @var object $embeddable */
                     $embeddable = $this->propertyAccessor->getValue($entity, $embeddablePropertyPath);
-                    $result = $processor->analyze(
-                        propertyAccessor: $this->propertyAccessor,
-                        embeddableObject: $embeddable,
-                        propertyPath: $embeddablePropertyPath,
-                        rootEntity: $entity,
-                        embeddedConfig: $embedded->getDoctrineConfig()
-                    );
+
+                    if (\is_string($processor)) {
+                        /** @var ProcessorInterface $processorInstance */
+                        $processorInstance = new $processor();
+                        $result = $processorInstance->analyze(
+                            propertyAccessor: $this->propertyAccessor,
+                            embeddableObject: $embeddable,
+                            propertyPath: $embeddablePropertyPath,
+                            rootEntity: $entity,
+                            embeddedConfig: $embedded->getDoctrineConfig()
+                        );
+                    } elseif ($processor instanceof \Closure) {
+                        $reflectionFunction = new \ReflectionFunction($processor);
+                        $parameters = $reflectionFunction->getParameters();
+                        $args = [];
+
+                        $availableArgs = [
+                            'propertyAccessor' => $this->propertyAccessor,
+                            'embeddableObject' => $embeddable,
+                            'propertyPath' => $embeddablePropertyPath,
+                            'rootEntity' => $entity,
+                            'embeddedConfig' => $embedded->getDoctrineConfig(),
+                        ];
+
+                        foreach ($parameters as $parameter) {
+                            $paramName = $parameter->getName();
+                            if (isset($availableArgs[$paramName])) {
+                                $args[$paramName] = $availableArgs[$paramName];
+                            } elseif ($parameter->isDefaultValueAvailable()) {
+                                $args[$paramName] = $parameter->getDefaultValue();
+                            } else {
+                                // This case should ideally not be reached if MetadataFactory validates arguments
+                                // For now, we assume all required parameters will be available in $availableArgs
+                            }
+                        }
+                        $result = $processor(...$args);
+                    } else {
+                        throw new LogicException(\sprintf('Processor must be a string (class-string) or a \\Closure, "%s" given.', \get_debug_type($processor)));
+                    }
+
                     switch ($result) {
                         case Result::SHOULD_BE_NULL:
                             try {

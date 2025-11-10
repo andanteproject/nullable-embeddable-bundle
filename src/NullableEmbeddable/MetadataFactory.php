@@ -8,7 +8,6 @@ use Andante\NullableEmbeddableBundle\Attribute\NullableEmbeddable;
 use Andante\NullableEmbeddableBundle\Exception\InvalidProcessorException;
 use Andante\NullableEmbeddableBundle\Exception\LogicException;
 use Andante\NullableEmbeddableBundle\NullableEmbeddable\Metadata\Embedded;
-use Andante\NullableEmbeddableBundle\ProcessorInterface;
 use Andante\NullableEmbeddableBundle\Util\EmbeddablePropertySorter;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
@@ -57,8 +56,14 @@ class MetadataFactory
                 /** @var NullableEmbeddable $attribute */
                 $attribute = $reflectionAttribute->newInstance();
                 if (null !== $attribute->processor) {
-                    if (!\is_string($attribute->processor) || !\is_subclass_of($attribute->processor, ProcessorInterface::class)) {
-                        throw new InvalidProcessorException(\sprintf('Processor "%s" for embeddable "%s" must implement "%s".', $attribute->processor, $embeddableClassName, ProcessorInterface::class));
+                    if (\is_string($attribute->processor)) {
+                        ProcessorValidator::assertValidClassString($attribute->processor, $embeddableClassName);
+                    } elseif ($attribute->processor instanceof \Closure) {
+                        ProcessorValidator::assertValidClosure($attribute->processor, $embeddableClassName, $entityClassFqcn, $embeddablePropertyPath);
+                    } else {
+                        // This else block should ideally be unreachable due to PHP's type system,
+                        // but kept for defensive programming if the type system is bypassed.
+                        throw new LogicException(\sprintf('Processor must be a string (class-string) or a \\Closure, "%s" given.', \get_debug_type($attribute->processor)));
                     }
                 }
                 $attributes[] = $attribute;

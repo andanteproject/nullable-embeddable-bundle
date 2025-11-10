@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Andante\NullableEmbeddableBundle\Tests\Fixtures\InvalidEntity;
 
 use Andante\NullableEmbeddableBundle\Attribute\NullableEmbeddable;
-use Andante\NullableEmbeddableBundle\Tests\Fixtures\Processor\InvalidProcessor;
+use Andante\NullableEmbeddableBundle\Tests\Fixtures\InvalidEntity\Processor\InvalidProcessor;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Embeddable]

@@ -24,11 +24,14 @@ $additionalRules = [
 $config = new PhpCsFixer\Config();
 $config->setUsingCache(false);
 $config->setRiskyAllowed(true);
+$config->setUnsupportedPhpVersionAllowed(true);
 $config->setRules($additionalRules);
 
 $finder = (new PhpCsFixer\Finder())
     ->in(__DIR__)
     ->exclude('var')
+    ->exclude('vendor')
+    ->exclude('vendor85')
 ;
 
 $config->setFinder($finder);

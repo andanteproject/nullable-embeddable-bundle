@@ -31,14 +31,15 @@ RUN apk add --no-cache \
     soap \
     xml
 
-# Install Xdebug
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
+# Install Xdebug (Currently not compatible with PHP 8.5-rc)
+# RUN pecl install xdebug-3.2.2 \
+#     && docker-php-ext-enable xdebug
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY docker/php/conf.d/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+# Configuration for Xdebug (Currently not compatible with PHP 8.5-rc)
+# COPY docker/php/conf.d/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 WORKDIR /var/www/html
 

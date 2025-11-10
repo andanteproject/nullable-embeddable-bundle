@@ -8,10 +8,10 @@ namespace Andante\NullableEmbeddableBundle\Attribute;
 class NullableEmbeddable
 {
     /**
-     * @param class-string $processor
+     * @param class-string|\Closure $processor
      */
     public function __construct(
-        public string $processor,
+        public string|\Closure $processor,
     ) {
     }
 }

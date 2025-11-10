@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidEntity;
+namespace Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidClassStringProcessorEntity;
 
 use Andante\NullableEmbeddableBundle\Attribute\NullableEmbeddable;
-use Andante\NullableEmbeddableBundle\Tests\Fixtures\Processor\AddressEmbeddableProcessor;
+use Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidClassStringProcessorEntity\Processor\AddressEmbeddableProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 

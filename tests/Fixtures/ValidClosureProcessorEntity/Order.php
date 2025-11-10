@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidEntity;
+namespace Andante\NullableEmbeddableBundle\Tests\Fixtures\ValidClosureProcessorEntity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'orders')]
+#[ORM\Table(name: 'valid_closure_processor_entity_order')]
 class Order
 {
     #[ORM\Id]
