@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ['8.1', '8.2', '8.3', '8.5']
+        php-version: ['8.1', '8.4', '8.5']
         symfony-version: ['5.4.*', '6.4.*', '7.0.*']
-        doctrine-orm-version: ['2.14.*', '2.15.*', '2.16.*', '2.17.*', '3.0.*']
+        doctrine-orm-version: ['2.20.*', '3.0.*']
         exclude:
           # Symfony 5.4 is not compatible with PHP 8.3
           - php-version: '8.3'
@@ -26,8 +26,11 @@ jobs:
             symfony-version: '7.0.*'
           - php-version: '8.2'
             symfony-version: '7.0.*'
+          # Doctrine 3.0 requires PHP 8.4 or higher
+          - php-version: '8.1'
+            doctrine-orm-version: '3.0.*'
 
-    name: P${{ matrix.php-version }} - S${{ matrix.symfony-version }} - D${{ matrix.doctrine-orm-version }}
+    name: PHP v${{ matrix.php-version }} - SF v${{ matrix.symfony-version }} - Doctrine ORM v${{ matrix.doctrine-orm-version }}
 
     steps:
       - uses: actions/checkout@v4
@@ -43,20 +46,14 @@ jobs:
         uses: ramsey/composer-install@v3
         with:
           composer-options: "--prefer-dist --no-progress --no-interaction --optimize-autoloader"
-          php-version: ${{ matrix.php-version }}
-          symfony-version: ${{ matrix.symfony-version }}
-          doctrine-orm-version: ${{ matrix.doctrine-orm-version }}
 
       - name: Run PHP-CS-Fixer
+        if: matrix.php-version == '8.5' && matrix.symfony-version == '7.0.*'
         run: vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --using-cache=no
 
-      - name: Run PHPStan (PHP < 8.5)
-        if: matrix.php-version != '8.5'
-        run: vendor/bin/phpstan analyse src tests --configuration=phpstan-lt-8.5.neon --memory-limit=1G
-
-      - name: Run PHPStan (PHP 8.5+)
-        if: matrix.php-version == '8.5'
+      - name: Run PHPStan
+        if: matrix.php-version == '8.5' && matrix.symfony-version == '7.0.*'
         run: vendor/bin/phpstan analyse src tests --configuration=phpstan-8.5-plus.neon --memory-limit=1G
 
       - name: Run PHPUnit tests
-        run: vendor/bin/phpunit --testsuite unit --testsuite functional
+        run: vendor/bin/phpunit

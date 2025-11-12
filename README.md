@@ -28,7 +28,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Embeddable]
 #[NullableEmbeddable(processor: static function (PropertyAccessor $propertyAccessor, object $embeddableObject): Result {
-    // The bundle ensures $embeddableObject is of the expected type.
     // We check if the 'code' property is uninitialized.
     if ($propertyAccessor->isUninitialized($embeddableObject, 'code')) {
         return Result::SHOULD_BE_NULL;
