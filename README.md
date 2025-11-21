@@ -2,7 +2,8 @@
 # Nullable Embeddable Bundle
 #### Symfony Bundle - [AndanteProject](https://github.com/andanteproject)
 [![Latest Version](https://img.shields.io/github/release/andanteproject/nullable-embeddable-bundle.svg)](https://github.com/andanteproject/nullable-embeddable-bundle/releases)
-![Github actions](https://github.com/andanteproject/nullable-embeddable-bundle/actions/workflows/workflow.yml/badge.svg?branch=main)
+![Github actions](https://github.com/andanteproject/nullable-embeddable-bundle/actions/workflows/ci.yml/badge.svg?branch=main)
+[![codecov](https://codecov.io/gh/andanteproject/nullable-embeddable-bundle/branch/main/graph/badge.svg)](https://codecov.io/gh/andanteproject/nullable-embeddable-bundle)
 ![Framework](https://img.shields.io/badge/Symfony-5.x|6.x|7.x-informational?Style=flat&logo=symfony)
 ![Php8](https://img.shields.io/badge/PHP-8.1|8.5%2B-informational?style=flat&logo=php)
 ![PhpStan](https://img.shields.io/badge/PHPStan-Level%209-success?style=flat&logo=php)

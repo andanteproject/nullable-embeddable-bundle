@@ -40,7 +40,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, sqlite3
-          coverage: none
+          coverage: ${{ matrix.php-version == '8.5' && matrix.symfony-version == '7.0.*' && matrix.doctrine-orm-version == '3.0.*' && 'pcov' || 'none' }}
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v3
@@ -56,4 +56,11 @@ jobs:
         run: vendor/bin/phpstan analyse src tests --configuration=phpstan-8.5-plus.neon --memory-limit=1G
 
       - name: Run PHPUnit tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit ${{ matrix.php-version == '8.5' && matrix.symfony-version == '7.0.*' && matrix.doctrine-orm-version == '3.0.*' && '--coverage-clover coverage.xml' || '' }}
+
+      - name: Upload coverage to Codecov
+        if: matrix.php-version == '8.5' && matrix.symfony-version == '7.0.*' && matrix.doctrine-orm-version == '3.0.*'
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
