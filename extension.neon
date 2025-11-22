@@ -1,0 +1,5 @@
+services:
+	-
+		class: Andante\NullableEmbeddableBundle\PHPStan\Rules\NullableEmbeddablePropertyRule
+		tags:
+			- phpstan.rules.rule

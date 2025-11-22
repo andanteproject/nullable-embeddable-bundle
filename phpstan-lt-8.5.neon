@@ -1,3 +1,6 @@
+includes:
+    - extension.neon
+
 parameters:
     level: 9
     bootstrapFiles:
@@ -8,3 +11,5 @@ parameters:
         - phpstan-stubs
     excludePaths:
         - tests/Fixtures/ValidClosureProcessorEntity
+        - tests/PHPStan
+        - tests/Functional/PHPStanRulesIssuesTests/Fixtures

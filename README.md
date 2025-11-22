@@ -268,6 +268,92 @@ The `analyze` method of your processor must return one of two values from the `R
 *   `Result::SHOULD_BE_NULL`: Indicates that the embeddable object should be treated as null. Note that "should" is used because the parent entity might have the embeddable class defined as not nullable. There is no guarantee the parent class accepts `null` as a value; this depends on database consistency and the user's data model.
 *   `Result::KEEP_INITIALIZED`: Indicates that the embeddable object should remain initialized.
 
+## PHPStan Extension
+
+This bundle includes a PHPStan extension that validates `#[NullableEmbeddable]` classes to ensure they follow best practices for working with Doctrine's nullable embeddable behavior.
+
+### Why This Extension is Important
+
+When Doctrine determines that an entire embeddable object should be null (which is what this bundle does), it sets **all** the embeddable's database columns to `NULL`. This has important implications for how you structure your embeddable classes:
+
+1. **Property Initialization**: Properties with non-null default values should be initialized in the constructor, not outside it. This is because Doctrine hydrates entities by skipping the constructor. For example:
+   ```php
+   // BAD - Don't do this:
+   private bool $enabled = true;  // Doctrine gets NULL from DB but property shows true
+
+   // GOOD - Do this instead:
+   public function __construct(
+       private bool $enabled = true,
+   ) {}
+   ```
+
+2. **Nullable Columns**: All properties mapped to database columns must be nullable. This can be achieved either by using a PHP nullable type (`?string`) which Doctrine automatically infers as `nullable: true`, or by explicitly setting `nullable: true` in the `#[Column]` attribute. This is required because when the embeddable object is null, Doctrine will set all its database columns to `NULL`.
+
+3. **Nested Embeddables with Defaults**: Embedded objects that have explicit non-null default values must be typed as nullable. Uninitialized embedded properties are fine since they remain uninitialized when the parent is null.
+
+### Automatic Installation (Recommended)
+
+If you have `phpstan/extension-installer` installed (which is included in `require-dev`), the extension will be automatically registered. No additional configuration needed!
+
+```bash
+composer require --dev phpstan/phpstan phpstan/extension-installer
+```
+
+### Manual Installation
+
+If you don't have `phpstan/extension-installer`, you can manually include the extension in your `phpstan.neon` or `phpstan.neon.dist`:
+
+```neon
+includes:
+    - vendor/andanteproject/nullable-embeddable-bundle/extension.neon
+```
+
+### What the Extension Checks
+
+The PHPStan extension will report errors for:
+
+1. **Properties with non-null default values outside the constructor** - These should be moved to the constructor to avoid hydration issues
+2. **Non-nullable column mappings** - Properties with `#[Column]` must be nullable, either via PHP nullable type (`?Type`) or explicit `nullable: true`
+3. **Embedded objects with non-null default values** - Embedded properties with explicit defaults must be nullable (uninitialized embedded properties are allowed)
+
+### Example
+
+```php
+#[ORM\Embeddable]
+#[NullableEmbeddable(processor: /* ... */)]
+class Address
+{
+    // ERROR: Property has non-null default outside constructor
+    // private bool $isPrimary = false;
+
+    // ERROR: Column is not nullable (neither PHP type nor explicit attribute)
+    // #[ORM\Column(type: Types::STRING)]
+    // private string $street;
+
+    // CORRECT: Column is nullable via PHP type (Doctrine infers nullable: true)
+    #[ORM\Column(type: Types::STRING)]
+    private ?string $street = null;
+
+    // ALSO CORRECT: Column explicitly nullable (even with non-nullable PHP type)
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private string $city;
+
+    // CORRECT: Uninitialized embedded property (will remain uninitialized when parent is null)
+    #[ORM\Embedded(class: Country::class)]
+    private Country $country;
+
+    // ALSO CORRECT: Embedded property initialized to null
+    #[ORM\Embedded(class: Region::class)]
+    private ?Region $region = null;
+
+    // CORRECT: Default value in constructor
+    public function __construct(
+        #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
+        private bool $isPrimary = false,
+    ) {}
+}
+```
+
 ## Configuration
 
 The bundle provides a configuration option to enable a cache warmer for improved performance in production environments.

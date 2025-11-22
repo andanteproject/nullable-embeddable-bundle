@@ -55,5 +55,16 @@
             "composer/package-versions-deprecated": true,
             "phpstan/extension-installer": true
         }
+    },
+    "extra": {
+        "phpstan": {
+            "includes": [
+                "extension.neon"
+            ]
+        }
+    },
+    "suggest": {
+        "phpstan/phpstan": "To validate NullableEmbeddable classes at static analysis time",
+        "phpstan/extension-installer": "To automatically register the PHPStan extension (recommended)"
     }
 }
