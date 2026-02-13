@@ -11,5 +11,7 @@ parameters:
         - phpstan-stubs
         - tests/Fixtures/ValidClosureProcessorEntity
     excludePaths:
+        - src/DependencyInjection/Configuration.php
         - tests/PHPStan
+        - tests/Fixtures/ValidClosureProcessorEntity
         - tests/Functional/PHPStanRulesIssuesTests/Fixtures

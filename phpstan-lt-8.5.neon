@@ -10,6 +10,6 @@ parameters:
         - tests
         - phpstan-stubs
     excludePaths:
+        - src/DependencyInjection/Configuration.php
         - tests/Fixtures/ValidClosureProcessorEntity
         - tests/PHPStan
-        - tests/Functional/PHPStanRulesIssuesTests/Fixtures
