@@ -19,6 +19,7 @@ $additionalRules = [
     'phpdoc_to_comment' => false,
     'phpdoc_var_without_name' => false,
     '@Symfony' => true,
+    'no_useless_else' => false,
 ];
 
 $config = new PhpCsFixer\Config();

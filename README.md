@@ -4,7 +4,7 @@
 [![Latest Version](https://img.shields.io/github/release/andanteproject/nullable-embeddable-bundle.svg)](https://github.com/andanteproject/nullable-embeddable-bundle/releases)
 ![Github actions](https://github.com/andanteproject/nullable-embeddable-bundle/actions/workflows/ci.yml/badge.svg?branch=main)
 [![codecov](https://codecov.io/gh/andanteproject/nullable-embeddable-bundle/branch/main/graph/badge.svg)](https://codecov.io/gh/andanteproject/nullable-embeddable-bundle)
-![Framework](https://img.shields.io/badge/Symfony-5.x|6.x|7.x-informational?Style=flat&logo=symfony)
+![Framework](https://img.shields.io/badge/Symfony-5.x|6.x|7.x|8.x-informational?style=flat&logo=symfony)
 ![Php8](https://img.shields.io/badge/PHP-8.1|8.5%2B-informational?style=flat&logo=php)
 ![PhpStan](https://img.shields.io/badge/PHPStan-Level%209-success?style=flat&logo=php)
 
@@ -47,7 +47,7 @@ class Country
 ```
 
 ## Requirements
-*   Symfony 5.x-7.x
+*   Symfony 5.x–8.x
 *   PHP 8.1+ (PHP 8.5+ for anonymous function processors)
 *   [Doctrine ORM](https://www.doctrine-project.org/projects/doctrine-orm/en/3.5/tutorials/embeddables.html)
 
@@ -265,7 +265,7 @@ The `PropertyAccessor` provided to your processor (or anonymous function) is a s
 
 The `analyze` method of your processor must return one of two values from the `Result` enum:
 
-*   `Result::SHOULD_BE_NULL`: Indicates that the embeddable object should be treated as null. Note that "should" is used because the parent entity might have the embeddable class defined as not nullable. There is no guarantee the parent class accepts `null` as a value; this depends on database consistency and the user's data model.
+*   `Result::SHOULD_BE_NULL`: Indicates that the embeddable object should be treated as null. Note that "should" is used because the parent entity might have the embeddable class defined as not nullable. There is no guarantee the parent entity accepts `null` as a value; this depends on database consistency and the user's data model.
 *   `Result::KEEP_INITIALIZED`: Indicates that the embeddable object should remain initialized.
 
 ## PHPStan Extension
@@ -287,7 +287,7 @@ When Doctrine determines that an entire embeddable object should be null (which 
    ) {}
    ```
 
-2. **Nullable Columns**: All properties mapped to database columns must be nullable. This can be achieved either by using a PHP nullable type (`?string`) which Doctrine automatically infers as `nullable: true`, or by explicitly setting `nullable: true` in the `#[Column]` attribute. This is required because when the embeddable object is null, Doctrine will set all its database columns to `NULL`.
+2. **Nullable Columns**: All properties mapped to database columns must be nullable. This can be achieved either by using a PHP nullable type (`?string`), which Doctrine automatically infers as `nullable: true`, or by explicitly setting `nullable: true` in the `#[Column]` attribute. This is required because when the embeddable object is null, Doctrine will set all its database columns to `NULL`.
 
 3. **Nested Embeddables with Defaults**: Embedded objects that have explicit non-null default values must be typed as nullable. Uninitialized embedded properties are fine since they remain uninitialized when the parent is null.
 
@@ -338,7 +338,7 @@ class Address
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private string $city;
 
-    // CORRECT: Uninitialized embedded property (will remain uninitialized when parent is null)
+    // CORRECT: Uninitialized embedded property (will remain uninitialized when the parent is null)
     #[ORM\Embedded(class: Country::class)]
     private Country $country;
 
